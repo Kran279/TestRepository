@@ -2,28 +2,71 @@
 #This is a programming language similar to python
 #Kiran Sinha 07202020
 from tkinter import *
+import tkinter, time
 #when the user clicks
 exponent_in_first_num = False
 answer=0
 
-
+animation_ww=800
+animation_wh=600
+animation_xpos_start=50
+animation_ypos_start=50
+animation_min_movement=5
 click1="startup"
+#the main window of the animation for the animation command
+def create_animation_window():
+  window = tkinter.Tk()
+  window.title("Animation")
+  # Uses python 3.6+ string interpolation
+  window.geometry(f'{animation_ww}x{animation_wh}')
+  return window
+
+#creates a canvas for animation and adds it to main window
+def create_animation_canvas(window):
+  canvas = tkinter.Canvas(window)
+  canvas.configure(bg="black") #change color into changeable variable later
+  canvas.pack(fill="both", expand=True)
+  return canvas
+
+#creates and animates the animation in an infinite loop
+def animate_animation(window, canvas,xinc,yinc):
+    if animation_shape == "circle":
+        animation = canvas.create_oval(animation_xpos_start-animation_size,
+                animation_ypos_start-animation_size,
+                animation_xpos_start+animation_size,
+                animation_ypos_start+animation_size,
+                fill="blue", outline="white", width=4)
+    elif animation_shape == "square":
+        animation = canvas.create_rectangle(animation_xpos_start-animation_size,
+                animation_ypos_start-animation_size,
+                animation_xpos_start+animation_size,
+                animation_ypos_start+animation_size,
+                fill="blue", outline="white", width=4)
+    while True:
+        canvas.move(animation,xinc,yinc)
+        window.update()
+        time.sleep(animation_speed)
+        animation_pos = canvas.coords(animation)
+        #unpacking array to variables
+        xl,yl,xr,yr = animation_pos
+        if xl < abs(xinc) or xr > animation_ww-abs(xinc):
+          xinc = -xinc
+        if yl < abs(yinc) or yr > animation_wh-abs(yinc):
+          yinc = -yinc
 
 #when user clicks button
 def click():
     global click1, window_title, background_, num1, operator,num2,num1exponent
-    global answer,exponent_in_first_num
+    global answer,exponent_in_first_num, animation_shape,animation_size
+    global animation_speed
     #getting what the user entered
     entered_text=textentry.get()
     #clearing the output box so later we can put our ouput in it
-    global click1, window_title, background_, num1
-    entered_text=textentry.get() #collects the text from the text entry
     output.delete(0.0, END)
 
 
     #Calculator command, upgrade later
     #asking first number
-    #Calculator command
     if entered_text.lower() == "calculator":
         click1 = "num1"
         output.insert(END, "What do you want the first number in your equation to "+
@@ -164,13 +207,71 @@ def click():
         output.insert(END, "Would you like your window to be named? If so,"+
         "what title? Enter 'no name' if you would not like it to be named.")
         click1="new window"
+
+    #More features
+    elif entered_text.lower() == "more features":
+        output.insert(END, "One cool feature is the 'animation' feature, wh"+
+        "ere you can create basic animations! Another nice feature is the 'p"+
+        "rint' feature.")
+    #Print command
+    elif entered_text.lower() == "print":
+        click1="print"
+        output.insert(END, "Type what you want to print.")
+    elif click1=="print":
+        output.insert(END, entered_text)
+        click1="normal"
+
+    #Animation command, upgrade later
+    elif entered_text.lower()=="animation":
+        click1 = "animation"
+        output.insert(END, "What would you like to animate? The options are:"+
+        " circle and square.")
+    elif click1=="animation":
+        if entered_text.lower() == "circle":
+            animation_shape = "circle"
+        elif entered_text.lower()=="square":
+            animation_shape="square"
+        else:
+            output.insert(END,"Sorry, that's not one of the options. You can "+
+            "retry or enter 'NO' to exit.")
+            return
+        click1="animation size"
+        output.insert(END, "What size do you want your "+animation_shape+"?")
+    elif click1 == "animation size":
+        try:
+            entered_text = int(entered_text)
+            animation_size=entered_text
+            click1="animation speed"
+            output.insert(END, "Name a speed for the animation. (0.1 means slow, "+
+            "0.01 means medium, 0.001 means fast, so on) Note: the faster "+
+            "the animation, the slower it refreshes, creating unnatural looki"+
+            "ng animations.")
+        except:
+            output.insert(END, "Sorry, that's not a number. Try again or ent"+
+            "er 'NO' to exit")
+    elif click1 == "animation speed":
+        try:
+            entered_text = float(entered_text)
+            animation_speed=entered_text
+        except:
+            output.insert(END, "Sorry, thats not a number. Try again or ent"+
+            "er 'NO' to exit.")
+            return
+        animation_window = create_animation_window()
+        animation_canvas = create_animation_canvas(animation_window)
+        animate_animation(animation_window,animation_canvas, animation_min_movement, animation_min_movement) 
+
+        
+
+            
 #features button
 def features():
     output.delete(0.0, END)
     output.insert(END, "To get started, the 'window' command is easy to use." +
     " Type 'new window' and hit enter. Once you have done so, you will be aske"+
     "d for more specifics like background and text, but those are optional."+
-    " Another good command is the calculator command, which can do basic math.")
+    " Another good command is the calculator command, which can do basic math."+
+    " Type in 'More Features' and hit enter to hear some more features.")
 #exit button
 def _exit():
     window.destroy()
@@ -191,4 +292,4 @@ Label (window, text="Output:", bg="grey", fg="black", font="none 12 bold") .grid
 output = Text(window, width=75, height=6, wrap=WORD, background="white")
 output.grid(row=5, column=0, columnspan=2, sticky=W)
 #exit button
-Button(window, text="Exit",width=6, command=_exit) .grid(row=12, column = 0, sticky=W)
+Button(window, bg="grey", text="Exit",width=6, command=_exit) .grid(row=12, column = 0, sticky=W)

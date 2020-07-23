@@ -3,108 +3,34 @@
 #Kiran Sinha 07202020
 from tkinter import *
 #when the user clicks
-exponent_in_first_num = False
-answer=0
+
+
 click1="startup"
 
 #when user clicks button
 def click():
-    global click1, window_title, background_, num1, operator,num2,num1exponent
-    global answer,exponent_in_first_num
-    #getting what the user entered
-    entered_text=textentry.get()
-    #clearing the output box so later we can put our ouput in it
+    global click1, window_title, background_, num1
+    entered_text=textentry.get() #collects the text from the text entry
     output.delete(0.0, END)
 
-
-    #Calculator command, upgrade later
-    #asking first number
+    #Calculator command
     if entered_text.lower() == "calculator":
         click1 = "num1"
-        output.insert(END, "What do you want the first number in your equation to "+
+        output.insert("What do you want the first number in your equation to "+
         "be?")
-    #if the user changes his mind
     elif entered_text == "NO":
         click1="normal"
-    #when the user chooses their first number, asking what operator the user wants
     elif click1=="num1":
-        #checking if they entered a valid number
         try:
-            entered_text=int(entered_text)
+            entered_text * 1
             num1 = entered_text
-            output.insert(END, "What would you like the operator to be? Type "+
-            "it in the input box as the operator (e.g. x, -, or /). If you w"+
-            "ould like your first number to be exponential, type 'exponent'")
-            click1 = "operator"
         except:
             output.insert(END, "Sorry, that's not a number. Try again or enter"+
             " 'NO' to exit.")
-        #checking operator the user chose
-    elif click1=="operator":
-        #if they wanted an exponent
-        if entered_text.upper() == "EXPONENT":
-            click1="exponent"
-            output.insert( END,"To what power would you like this number to be?")
-        #checking operator
-        else:
-            if entered_text.lower() == "x":
-                operator = 'multiplication'
-            elif entered_text == "-":
-                operator = 'subtraction'
-            elif entered_text == "/":
-                operator = "division"
-            elif entered_text == "+":
-                operator = "addition"
-            else:
-                output.insert(END,"Sorry, that's not valid. Try again or ente"+
-                "r 'NO' to exit.")
-                return
-            click1="num2"
-            output.insert(END, "What would you like the second number in "+
-            "your equation to be?")
-    #if  they want an exponent
-    elif click1=="exponent":
-        #checking if the user entered an actual number
-        try:
-            entered_text = int(entered_text)
-            num1exponent = entered_text
-            #saying that there is an exponent in this equation so we can apply
-            #it when we do the calculations
-            exponent_in_first_num=True
-            #redirecting user back to choosing an operator
-            click1="operator"
-            output.insert(END, "Okay. What would you like your operator to be?")
-        except:
-            output.insert(END, "That is not a number. Try again or enter 'NO' t"+
-            "o exit.")
-    #choosing second number in equation
-    elif click1 == "num2":
-        #checking if they entered an actual number
-        try:
-            entered_text=int(entered_text)
-        except:
-            output.insert(END, "Sorry, that's not a number. You can try again o"+
-            "r enter 'NO' to exit.")
-            return
-        num2=entered_text
-        #if there is an exponent, then it will apply the exponent
-        if exponent_in_first_num:
-            num1=int(num1)**int(num1exponent)
-        #calculating
-        if operator == "multiplication":
-            answer = int(num1)*int(num2)
-        elif operator == "addition":
-            answer = int(num1)+int(num2)
-        elif operator == "division":
-            answer = int(num1)/int(num2)
-        elif operator == "subtraction":
-            answer = int(num1)-int(num2)
-        output.insert(END, "The answer is "+str(answer)+"!")
-        answer=0
-            
-    #NEW WINDOW command, upgrade later
+    
+    #NEW WINDOW command
     #if color incorrect
-    elif click1=="missed color":
+    if click1=="missed color":
         if entered_text.upper()=="STOP":
             window=Tk()
             window.title(window_title)
@@ -165,7 +91,7 @@ def features():
     "d for more specifics like background and text, but those are optional."+
     " Another good command is the calculator command, which can do basic math.")
 #exit button
-def exit():
+def _exit():
     window.destroy()
     exit()
 #creating window
@@ -183,3 +109,5 @@ Button(window, text="Enter",bg="grey",fg="black", width=6, command=click) .grid(
 Label (window, text="Output:", bg="grey", fg="black", font="none 12 bold") .grid(row=4, column=0, sticky=W)
 output = Text(window, width=75, height=6, wrap=WORD, background="white")
 output.grid(row=5, column=0, columnspan=2, sticky=W)
+#exit button
+Button(window, text="Exit",width=6, command=_exit) .grid(row=12, column = 0, sticky=W)

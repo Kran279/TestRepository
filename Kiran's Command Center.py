@@ -266,42 +266,42 @@ def click():
             output.insert(END, "Sorry, that's not a number. Try again or ent"+
             "er 'NO' to exit")
     elif click1 == "animation speed": #checking animation speed
-        try:
+        try: #checking if they entered an actual integer
             entered_text = float(entered_text)
             animation_speed=entered_text
         except:
             output.insert(END, "Sorry, thats not a number. Try again or ent"+
             "er 'NO' to exit.")
             return
-        click1="inside color"
+        click1="inside color" #asking inside color of animation
         output.insert(END, "What would you like the inside color of your "+
         animation_shape+" to be?")
     elif click1 == "inside color":
-        try:
+        try:#checking if they actually entered a color
             window =Tk()
             window.configure(bg=entered_text)
             window.destroy()
             animation_inside_color=entered_text
-            output.insert(END,"What should the outline color be?")
+            output.insert(END,"What should the outline color be?") #asking outline color
             click1 = "outline color"
         except:
             output.insert(END,"Sorry, that's not a color. Try again or enter"+
             " 'NO' to exit.")
             window.destroy()
-    elif click1 == "outline color":
+    elif click1 == "outline color": #checking if they entered an actual color
         try:
             window =Tk()
             window.configure(bg=entered_text)
             window.destroy()
             animation_outline_color=entered_text
             click1="window background color"
-            output.insert(END,"What color should the window be?")
+            output.insert(END,"What color should the window be?") #asking window color
         except:
             output.insert(END,"Sorry, that's not a color. Try again or enter"+
             " 'NO' to exit.")
             window.destroy()
-    elif click1=="window background color":
-        try:
+    elif click1=="window background color": 
+        try: #checking if they actually entered a color
             window =Tk()
             window.configure(bg=entered_text)
             animation_window_background_color=entered_text
@@ -312,7 +312,7 @@ def click():
             window.destroy()
             return
         output.insert(END, "You can enter 'close animation' to destroy the animation")
-
+        #animating
         animation_window = create_animation_window()
         animation_canvas = create_animation_canvas(animation_window)
         animate_animation(animation_window,animation_canvas, animation_min_movement, animation_min_movement) 

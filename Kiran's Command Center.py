@@ -6,17 +6,20 @@ import tkinter, time
 #when the user clicks
 exponent_in_first_num = False
 answer=0
-
+animation_inside_color="white"
+animation_outline_color="white"
+animation_window_background_color = "black"
 animation_ww=800
 animation_wh=600
-animation_xpos_start=50
-animation_ypos_start=50
+animation_xpos_start=400
+animation_ypos_start=300
 animation_min_movement=5
 click1="startup"
 #the main window of the animation for the animation command
 def create_animation_window():
   window = tkinter.Tk()
   window.title("Animation")
+  window.configure(bg=animation_window_background_color)
   # Uses python 3.6+ string interpolation
   window.geometry(f'{animation_ww}x{animation_wh}')
   return window
@@ -24,24 +27,27 @@ def create_animation_window():
 #creates a canvas for animation and adds it to main window
 def create_animation_canvas(window):
   canvas = tkinter.Canvas(window)
-  canvas.configure(bg="black") #change color into changeable variable later
+  canvas.configure(bg=animation_window_background_color) #change color into changeable variable later
   canvas.pack(fill="both", expand=True)
   return canvas
 
 #creates and animates the animation in an infinite loop
 def animate_animation(window, canvas,xinc,yinc):
+    #if circle, sets up animation to be a circle
     if animation_shape == "circle":
         animation = canvas.create_oval(animation_xpos_start-animation_size,
                 animation_ypos_start-animation_size,
                 animation_xpos_start+animation_size,
                 animation_ypos_start+animation_size,
-                fill="blue", outline="white", width=4)
+                fill=animation_inside_color, outline=animation_outline_color, width=4)
+    #if square, sets it up to be a square
     elif animation_shape == "square":
         animation = canvas.create_rectangle(animation_xpos_start-animation_size,
                 animation_ypos_start-animation_size,
                 animation_xpos_start+animation_size,
                 animation_ypos_start+animation_size,
                 fill="blue", outline="white", width=4)
+    #actual animation
     while True:
         canvas.move(animation,xinc,yinc)
         window.update()
@@ -53,12 +59,16 @@ def animate_animation(window, canvas,xinc,yinc):
           xinc = -xinc
         if yl < abs(yinc) or yr > animation_wh-abs(yinc):
           yinc = -yinc
+        entered_text=textentry.get()
+        if entered_text.lower() == "close animation":
+            window.destroy()
 
 #when user clicks button
 def click():
     global click1, window_title, background_, num1, operator,num2,num1exponent
     global answer,exponent_in_first_num, animation_shape,animation_size
-    global animation_speed
+    global animation_speed, animation_inside_color, animation_outline_color
+    global animation_window_background_color
     #getting what the user entered
     entered_text=textentry.get()
     #clearing the output box so later we can put our ouput in it
@@ -226,30 +236,36 @@ def click():
         click1 = "animation"
         output.insert(END, "What would you like to animate? The options are:"+
         " circle and square.")
+    #choosing what the user wants to animate
     elif click1=="animation":
+        #checking if the user chose one of the options
         if entered_text.lower() == "circle":
             animation_shape = "circle"
         elif entered_text.lower()=="square":
             animation_shape="square"
+        #if the user didn't
         else:
             output.insert(END,"Sorry, that's not one of the options. You can "+
             "retry or enter 'NO' to exit.")
             return
         click1="animation size"
-        output.insert(END, "What size do you want your "+animation_shape+"?")
+        #asking size of animation
+        output.insert(END, "What size do you want your "+animation_shape+"?"+
+        " Warning: If you make the size bigger than 300, then it will not b"+
+        "e able to move")
     elif click1 == "animation size":
-        try:
+        try: #checking if they entered an actual integer
             entered_text = int(entered_text)
             animation_size=entered_text
-            click1="animation speed"
+            click1="animation speed" #if they did, ask for speed
             output.insert(END, "Name a speed for the animation. (0.1 means slow, "+
             "0.01 means medium, 0.001 means fast, so on) Note: the faster "+
             "the animation, the slower it refreshes, creating unnatural looki"+
             "ng animations.")
-        except:
+        except: #if not, try again
             output.insert(END, "Sorry, that's not a number. Try again or ent"+
             "er 'NO' to exit")
-    elif click1 == "animation speed":
+    elif click1 == "animation speed": #checking animation speed
         try:
             entered_text = float(entered_text)
             animation_speed=entered_text
@@ -257,11 +273,50 @@ def click():
             output.insert(END, "Sorry, thats not a number. Try again or ent"+
             "er 'NO' to exit.")
             return
+        click1="inside color"
+        output.insert(END, "What would you like the inside color of your "+
+        animation_shape+" to be?")
+    elif click1 == "inside color":
+        try:
+            window =Tk()
+            window.configure(bg=entered_text)
+            window.destroy()
+            animation_inside_color=entered_text
+            output.insert(END,"What should the outline color be?")
+            click1 = "outline color"
+        except:
+            output.insert(END,"Sorry, that's not a color. Try again or enter"+
+            " 'NO' to exit.")
+            window.destroy()
+    elif click1 == "outline color":
+        try:
+            window =Tk()
+            window.configure(bg=entered_text)
+            window.destroy()
+            animation_outline_color=entered_text
+            click1="window background color"
+            output.insert(END,"What color should the window be?")
+        except:
+            output.insert(END,"Sorry, that's not a color. Try again or enter"+
+            " 'NO' to exit.")
+            window.destroy()
+    elif click1=="window background color":
+        try:
+            window =Tk()
+            window.configure(bg=entered_text)
+            animation_window_background_color=entered_text
+            window.destroy()
+        except:
+            output.insert(END,"Sorry, that's not a color. Try again or enter"+
+            " 'NO' to exit.")
+            window.destroy()
+            return
+        output.insert(END, "You can enter 'close animation' to destroy the animation")
+
         animation_window = create_animation_window()
         animation_canvas = create_animation_canvas(animation_window)
         animate_animation(animation_window,animation_canvas, animation_min_movement, animation_min_movement) 
-
-        
+ 
 
             
 #features button

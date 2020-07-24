@@ -222,7 +222,7 @@ def adventure_game():
             game_output.insert(END, "You and Charles sneak aboard, and you stay hid"+
             "den until the ship docks. You then sneak out, and find that you ar"+
             "e in The New World, America. THE END (note: click next to restart)")
-            storu_loctaion="started"
+            story_location="started"
         else:
             game_output.insert(END, "Please chooose one of the options.")
     elif story_location=="3:1":
@@ -252,30 +252,33 @@ def adventure_game():
             "grabs his pistol. He heads to the deck, and looks closer at the ships."+
             " He placed his gun on the mantle of the ship to pull out his binoculars."+
             " Then, the gun discharges toward the other ship, and they return fire."+
-            ' The captain swears, and yell, "ARM THE CANNONS!"'
-            story_location="3:3":
-        elif story_location == "3:3":
-            game_output.insert(END,"Click choice1 to arm the cannons and fi"+
-            "ght, click2 to run to the dinghy and escape, or click3 to tak"+
-            "e shelter belowdeck.")
-            story_location="3:choice2"
-        elif story_location=="3:choice2":
-            if choice1==True:
-                game_output.insert(END, "You fight back, and the Spanish ship sinks. You and the crew"+
-                "continue sailing safely. THE END (note: click next to restart")
-                story_location="started"
-            elif choice2==True:
-                game_output.insert(END, "You and Charles run to the dinghy and"+
-                " escape with some rations. You later arrive at The New World,"+
-                " also known as America. THE END (note: click next to restart")
-                story_location="started"
-            elif choice3==True:
-                game_output.insert(END, "You run and hide belowdecks, and your "+
-                "crew wins the fight, but the ship has a hole in it. After a fe"+
-                "w days of work, the ship is as good as new. THE END (note: cl"+
-                "ick next to restart")
-            else:
-                game_output.insert(END, "Please chooose one of the options.")  
+            ' The captain swears, and yell, "ARM THE CANNONS!"')
+            story_location="3:3"
+        else:
+            game_output.insert(END, "Please chooose one of the options.")  
+    elif story_location == "3:3":
+        game_output.insert(END,"Click choice1 to arm the cannons and fi"+
+        "ght, click2 to run to the dinghy and escape, or click3 to tak"+
+        "e shelter belowdeck.")
+        story_location="3:choice2"
+    elif story_location=="3:choice2":
+        if choice1==True:
+            game_output.insert(END, "You fight back, and the Spanish ship sinks. You and the crew"+
+            "continue sailing safely. THE END (note: click next to restart")
+            story_location="started"
+        elif choice2==True:
+            game_output.insert(END, "You and Charles run to the dinghy and"+
+            " escape with some rations. You later arrive at The New World,"+
+            " also known as America. THE END (note: click next to restart)")
+            story_location="started"
+        elif choice3==True:
+            game_output.insert(END, "You run and hide belowdecks, and your "+
+            "crew wins the fight, but the ship has a hole in it. After a fe"+
+            "w days of work, the ship is as good as new. THE END (note: cl"+
+            "ick next to restart")
+            story_location="started"
+        else:
+            game_output.insert(END, "Please chooose one of the options.")  
     choice1 = False
     choice2 = False #resetting variables
     choice3 = False

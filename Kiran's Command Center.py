@@ -18,7 +18,52 @@ animation_wh=600
 animation_xpos_start=400
 animation_ypos_start=300
 animation_min_movement=5
+current_game=False
 click1="startup"
+
+
+
+# Imports each and every method and class 
+# of module tkinter and tkinter.ttk 
+
+
+
+def map_(): #map function in game
+    game1_map=Tk()#creating map window
+    #finding where in the story the player is
+    if story_location=="1"or story_location=="2"or story_location=="3"or story_location=="1:1"or story_location=="2:1" or story_location=="3:1" or story_location=="3:2"or story_location=="3:choice2"or story_location=="3:1":
+        game1_map.configure(bg="black")#settings for the map
+        game1_map.title("Map")
+        game1_map.geometry('300x300')
+        canvas=Canvas(game1_map,height=300,width=300,bg="sky blue")
+        oval = canvas.create_oval(102,94,118,120,fill="brown") #creating shapes in it
+        oval = canvas.create_oval(105,105,115,115, fill="lime")
+        polygon = canvas.create_polygon(250,50,200,100,210,220,280,150,fill="green")
+        canvas.pack() #running the main loop
+        game1_map.mainloop()
+        
+    elif story_location=="1:2" or story_location=="1:3" or story_location== "1:4" or story_location=="1:choice1":
+        
+        game1_map.configure(bg="black") #settings for the map
+        game1_map.title("Map")
+        game1_map.geometry('300x300')
+        canvas=Canvas(game1_map,height=300,width=300,bg="sky blue")
+ 
+        polygon = canvas.create_polygon(250,50,200,100,210,220,280,150,fill="green")
+        oval = canvas.create_oval(200,100,210,110, fill="lime") #creating shapes
+        canvas.pack()
+        game1_map.mainloop()
+    elif story_location=="2:2"or story_location=="2:choice1":
+        game1_map.configure(bg="black")  #settings for the map
+        game1_map.title("Map")
+        game1_map.geometry('300x300')
+        canvas=Canvas(game1_map,height=300,width=300,bg="sky blue")
+        oval = canvas.create_oval(115,50,125,60, fill="lime") #creating shapes
+        polygon = canvas.create_polygon(250,50,200,100,210,220,280,150,fill="green")
+        canvas.pack()
+        game1_map.mainloop()
+    else: #if the user just started
+        Label (game1_map, text="Nothing to see here (yet)", bg="white", fg="black", font="none 12 bold") .grid(row=1, column=0, sticky=W)
 #the main window of the animation for the animation command
 def create_animation_window():
   window = tkinter.Tk()
@@ -71,12 +116,15 @@ def animate_animation(window, canvas,xinc,yinc):
 def adventure_game():
     global story_location, game_output, choice1, choice2, choice3
     game_output.delete(0.0, END) #clearing output
+    current_game=True
     if story_location == "starting":
         game_output.insert(END, "The 'next' button is used to advance the st"+
         "ory. The narration box might tell you where you are, and then it is"+
         " your job to click next once you have read it. The next is essent"+
-        "ially telling the narration box to 'move on', and continue. Now that"+
-        " you know the features, click 'next' to start.")
+        "ially telling the narration box to 'move on', and continue. The 'map'"+
+        " button is a button that creates a map to show where you are in the "+
+        "fictional world. You are represented as a green circle. Click 'next'"+
+        " to start playing.")
         story_location="started"
     elif story_location == "started":
         game_output.insert(END, "You are a sailor aboard the S. S. Rapscalli"+
@@ -227,7 +275,7 @@ def adventure_game():
             game_output.insert(END, "Please chooose one of the options.")
     elif story_location=="3:1":
         game_output.insert(END, "You warily nod, and get up. You decide you and him should get some fr"+
-        "esh air. You two walk out onto the deck, and you see three ships ap"+
+        "esh air. You two walk out onto  three ships ap"+
         "proaching. Click choice1 to abandon the ship on the dinghy, choice2 to"+
         " go back to sleep and hope they are friendly, and choice3 to alert the captain.")
         story_location="3:choice1"
@@ -319,13 +367,19 @@ def click():
         Button(window, text="Choice 1",bg="red",fg="black", width=6, command=choice1) .grid(row=8, column=0, sticky=W)
         Button(window, text="Choice 2",bg="green",fg="black", width=6, command=choice2) .grid(row=8, column=1, sticky=W)
         Button(window, text="Choice 3",bg="blue",fg="black", width=6, command=choice3) .grid(row=8, column=2, sticky=W)
-        game_output.insert(END, "Welcome to: Adventure Game 1! In this game,"+
-        " the 'narration' box of which you are reading this from tells the s"+
-        "tory. You, the player, make decisions to define the story. So, the "+
-        "narration box might say: 'You find a fork in the road. One road is "+
-        "clean, one dirty, and one hidden. Which do you take?'. It would th"+
-        "en say something like:'Click 'choice1' do go the dirty way, 'choice2'"+
-        " for the clean way,' etc. (click NEXT)")
+        Label (window, text="Adventure Game 1", bg="light blue", fg="black", font="none 12 bold") .grid(row=0, column=1, sticky=W)
+        Button(window, text="Map",bg="yellow",fg="black", width=6, command=map_) .grid(row=0, column=0, sticky=W)
+        if current_game==False:
+            game_output.insert(END, "Welcome to: Adventure Game 1! In this game,"+
+            " the 'narration' box of which you are reading this from tells the s"+
+            "tory. You, the player, make decisions to define the story. So, the "+
+            "narration box might say: 'You find a fork in the road. One road is "+
+            "clean, one dirty, and one hidden. Which do you take?'. It would th"+
+            "en say something like:'Click 'choice1' do go the dirty way, 'choice2'"+
+            " for the clean way,' etc. (click NEXT)")
+        else:
+            game_output.insert(END, "Click 'next' to continue your story.")
+
     #Calculator command, upgrade later
     #asking first number
     elif entered_text.lower() == "calculator":
@@ -413,8 +467,6 @@ def click():
         answer=0
 
     #NEW WINDOW command, upgrade later
-
-    #NEW WINDOW command
     #if color incorrect
     elif click1=="missed color":
         if entered_text.upper()=="STOP":
@@ -588,12 +640,12 @@ window = Tk()
 window.title("Kiran's Programming Language")
 window.configure(background="orange")
 #features button
-Button(window, text="Features",bg="blue",fg="black", width=6, command=features) .grid(row=8, column=0, sticky=W)
+Button(window, text="Features",bg="sky blue",fg="black", width=6, command=features) .grid(row=8, column=0, sticky=W)
 #input
 Label (window, text="Input:", bg="orange", fg="black", font="none 12 bold") .grid(row=1, column=0, sticky=W)
 textentry = Entry(window, width=30, bg="white")
 textentry.grid(row=2, column=0, sticky=W)
-Button(window, text="Enter",bg="green",fg="black", width=6, command=click) .grid(row=3, column=0, sticky=W)
+Button(window, text="Enter",bg="lime",fg="black", width=6, command=click) .grid(row=3, column=0, sticky=W)
 #output
 Label (window, text="Output:", bg="orange", fg="black", font="none 12 bold") .grid(row=4, column=0, sticky=W)
 output = Text(window, width=75, height=6, wrap=WORD, background="white")

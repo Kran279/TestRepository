@@ -3,8 +3,7 @@
 #Kiran Sinha 07202020
 from tkinter import *
 import tkinter, time
-#when the user clicks
-exponent_in_first_num = False
+exponent_in_first_num = False #setting variables
 answer=0
 choice1=False
 choice2=False
@@ -20,14 +19,26 @@ animation_ypos_start=300
 animation_min_movement=5
 current_game=False
 click1="startup"
+calculate_ = False
+exponents =[]
+nums=[]
+operators=[]
+num_of_exponents=0
+incalcloop = False
+order_of_operations=0
 
 
-
-# Imports each and every method and class 
-# of module tkinter and tkinter.ttk 
-
-
-
+#function for the calculator, does the math
+def calculation(numb1,numb2,operator_): #importing variables
+    if operator_ == "multiplication_": #checking the operator, then doing the
+        pass                           #math. If it is multiplication or 
+    elif operator_ == "addition":      #division, it ignores it as PEMDAS was
+        answer = int(numb1)+int(numb2) #already applied in the click function
+    elif operator_ == "division_":
+        pass
+    elif operator_ == "subtraction":
+        answer = int(numb1)-int(numb2)
+    return answer
 def map_(): #map function in game
     game1_map=Tk()#creating map window
     #finding where in the story the player is
@@ -344,10 +355,16 @@ def choice3(): #choice buttons for the adventure game
     adventure_game()
 #when user clicks button
 def click():
+    #globalizing variables
     global click1, window_title, background_, num1, operator,num2,num1exponent
     global answer,exponent_in_first_num, animation_shape,animation_size
     global animation_speed, animation_inside_color, animation_outline_color
-    global animation_window_background_color, game_output
+    global animation_window_background_color, game_output, exponent_in_second_num
+    global num3, num4, num5,operator_2,operator_3,operator_4,num2exponent
+    global num3exponent,num4exponent,num5exponent,exponent_in_third_num
+    global exponent_in_fourth_num,exponent_in_fifth_num,num_of_nums,calculate_
+    global nums, exponents, num_of_exponents,operators,num_of_operators,incalcloop
+    global order_of_operations
     #getting what the user entered
     entered_text=textentry.get()
     #clearing the output box so later we can put our ouput in it
@@ -450,21 +467,112 @@ def click():
             output.insert(END, "Sorry, that's not a number. You can try again o"+
             "r enter 'NO' to exit.")
             return
-        num2=entered_text
-        #if there is an exponent, then it will apply the exponent
+        num2=entered_text #preparing for 'loop'
+        click1="next operator"
+        num_of_nums=2 
+        output.insert(END, "Would you like an exponent for the second number?"+
+        " Enter 'next exponent' if so. If not, then enter 'END' to calculate or en"+
+        "ter an operator (e.g. 'x' or '-' if you would like to add more to the equation.")
+        calculate_ = True
+        nums.append(num1)
+        nums.append(num2)
+        try:
+            exponents.append(num1exponent)
+        except:
+            pass
         if exponent_in_first_num:
-            num1=int(num1)**int(num1exponent)
-        #calculating
-        if operator == "multiplication":
-            answer = int(num1)*int(num2)
-        elif operator == "addition":
-            answer = int(num1)+int(num2)
-        elif operator == "division":
-            answer = int(num1)/int(num2)
-        elif operator == "subtraction":
-            answer = int(num1)-int(num2)
-        output.insert(END, "The answer is "+str(answer)+"!")
-        answer=0
+            num_of_exponents = 1
+        else:
+            num_of_exponents=0
+        num_of_operators=1
+        operators.append(operator)
+        incalcloop=True
+        
+    elif click1=="next exponent": #if the user wants an exponent
+        try:
+            entered_text=int(entered_text) #checking if they entered a number
+            exponents.append(entered_text)
+            num_of_exponents += 1  #sending them to choose an operator if they want
+            click1="next operator" 
+            output.insert(END, "Would you like another operator? Enter the operator"+
+            " of choice if so (e.g. '/' or '+') or enter 'END' to calculate.")
+            calculate_=True
+        except: #if they didn't enter a number
+            output.insert(END, "Sorry, that's not a number. Try again or enter "+
+            "'NO' to exit.")
+    elif click1=="next operator"or entered_text=="next operator"and incalcloop or entered_text=="next exponent"and incalcloop:
+        calculate_=False
+        if entered_text.lower()=="next exponent": #if they want an exponent
+            output.insert(END, "What would you like this exponent to be?")
+            click1="next exponent" #sending them to choosing an exponent
+        elif entered_text.lower()=="x":
+            operators.append("multiplication") #choosing operator
+        elif entered_text=="+":
+            operators.append("addition")
+        elif entered_text=="-":
+            operators.append("subtraction")
+        elif entered_text=="/":
+            operators.append("division")
+        elif entered_text.upper()=="END": #if they want to calculate, sending them
+            calculate_=True               #to the calculations
+            click1="calculate"
+            output.insert(END,"Click 'next'!")
+        else: #if they didn't enter any of the above
+            output.insert(END, "Sorry, that's not one of the options. You can "+
+            "try again or enter 'NO' to exit.")
+            return
+        if entered_text.upper() != "END" and entered_text.upper()!="NEXT EXPONENT":
+            num_of_operators += 1 #changing the number of operators
+            exponents.append(1) #adding exponent to correspond with the user's number
+            output.insert(END,"What would you like the next number to be?")
+            click1="next num" #sending them to choosing the next number
+    elif click1=="next num":
+        try: #did they enter an ingeger?
+            entered_text=int(entered_text)
+            nums.append(entered_text) #adding the number to a list
+            num_of_nums+=1
+        except: # if they didn't
+            output.insert(END, "Sorry, that's not a valid number. Try again or"+
+            " enter 'NO' to exit.")
+            return #sending them back
+        output.insert(END,"Would you like an exponent for this number? Enter "+
+        "'next exponent' if so, or if you want another operator, then enter th"+
+        "e operator of choice (e.g. 'x','/'). Alternatively, you can enter 'E"+
+        "ND' to exit.")
+        click1="next operator" #if the user wants, they can choose an operator
+        calculate_=True
+    elif click1=="calculate" or entered_text.upper()=="END": #the calculations
+        if calculate_: #verifying they actually can calculate
+            #applying exponents
+            #this loop repeats the ammount of exponents there are and applies them
+            for x in range(0,num_of_exponents): 
+                nums[x]=nums[x]**exponents[x]
+            #applying pemdas by searching the list for multiplication or division
+            while 'multiplication' in operators:
+                for z in range(0,num_of_operators):
+                    if operators[z]=="multiplication": #checking for multiplication
+                        operators[z]="multiplication_"
+                        order_of_operations = z
+                        nums[z]=nums[z]*nums[z+1] #applying PEMDAS
+                        nums.remove(nums[z+1])
+            while 'division' in operators:
+                for q in range(0,num_of_operators):
+                    if operators[q]=="division": #checking for division
+                        operators[q]="division_"
+                        order_of_operations = q
+                        nums[q]=nums[q]/nums[q+1] #applying PEMDAS
+                        nums.remove(nums[q+1])
+                
+            #calculating
+            answer = 0
+            for y in range(0,num_of_operators):
+                try: #using the calculation function
+                    answer += calculation(nums[y],nums[y+1],operators[y])
+                except: #if there is nothing left to calculate, then it does nothing
+                    pass
+            output.insert(END, "The answer is "+str(answer)+"!")#telling user answer
+            answer=0#setting answer back to zero so it can calculate again later
+            click1="normal"
 
     #NEW WINDOW command, upgrade later
     #if color incorrect
@@ -504,7 +612,7 @@ def click():
         else:
             click1="normal"
             window = Tk()
-            window.title(window_title)
+            window.title(window_title)a
             output.insert(END, "Okay")
     #asking name of window
     elif click1=="new window":

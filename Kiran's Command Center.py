@@ -9,8 +9,12 @@ answer=0
 choice1=False
 choice2=False
 choice3=False
+words_found = []
 story_location="starting"
 animation_inside_color="white"
+hangman_words= ['galaxy','potato','lucky','random','mystify','wizard','rhythm',
+'stretch','swivel','wavy','blitz','jackpot','fishhook','fission','blizzard','crypt',
+'ghost']
 animation_outline_color="white"
 animation_window_background_color = "black"
 animation_ww=800
@@ -18,6 +22,7 @@ animation_wh=600
 animation_xpos_start=400
 animation_ypos_start=300
 animation_min_movement=5
+hangman_word = "none"
 random1 = "none"
 current_game=False
 click1="startup"
@@ -35,10 +40,22 @@ bg2="sky blue"
 bg3="lime"
 bg4="red"
 bg5="purple"
+word_found=""
+strikes = 10
+#function that splits a word into letters
+def split(word):
+    return list(word) #returning the split word
+#function that runs through the hangman list and outputs the word
+def output_words(words_found):
+    global word_found
+    word_found=" "
+    word_found=word_found.join(words_found) #joining the letters
+    word_found=word_found.lstrip(" ") #stripping of spaces
+    return word_found #returning variable
 #function for the random command command
 def randomc():
     global random1, click1
-    random1 = random.randint(1,5)
+    random1 = random.randint(1,6)
     if random1==1:
         click1="calculator"
     elif random1==2:
@@ -49,6 +66,8 @@ def randomc():
         click1="create window"
     elif random1==5:
         click1="game 1"
+    elif random1==6:
+        click1="hangman"
     output.insert(END, "You got "+click1+"! Click 'next' to start it.")
 #function for creating window
 def create_window(bg,name,bg2,bg3,bg4,bg5):
@@ -481,7 +500,8 @@ def click():
     global num3exponent,num4exponent,num5exponent,exponent_in_third_num
     global exponent_in_fourth_num,exponent_in_fifth_num,num_of_nums,calculate_
     global nums, exponents, num_of_exponents,operators,num_of_operators,incalcloop
-    global order_of_operations, random
+    global order_of_operations, random1,hangman_word,hangman_letters,words_found
+    global strikes,x
     #getting what the user entered
     entered_text=textentry.get()
     #clearing the output box so later we can put our ouput in it
@@ -762,7 +782,8 @@ def click():
         "ere you can create basic animations! Another nice feature is the 'p"+
         "rint' feature. One cool game you can play is 'game 1'. It is an"+
         " adventure game! If you don't know what to do, you can just enter"+
-        " 'random command' and it will give use a random command!")
+        " 'random command' and it will give use a random command! Another c"+
+        "ool game is hangman!")
     #Print command
     elif entered_text.lower() == "print" or click1=="print1":
         click1="print"
@@ -858,9 +879,42 @@ def click():
         animate_animation(animation_window,animation_canvas, animation_min_movement, animation_min_movement) 
     #random command command
     elif entered_text.lower()=="random command":
-        randomc()
-
-            
+        randomc() #using the random command command
+    elif entered_text.lower()=="hangman" or click1=="hangman":
+        output.insert(END, "This is a hangman game! In it, I will choos"+
+        "e a random word and you will have to try to guess it! You get "+
+        "10 strikes, and when you run out, you lose! Click 'next' to s"+
+        "tart! (make sure you clear the input box")
+        click1="starting hangman"
+        hangman_word=random.choice(hangman_words)
+        hangman_letters = split(hangman_word) #choosing a word
+        for letter in hangman_letters:
+            words_found.append("_") #creating letters found list
+    elif click1=="starting hangman":
+        output.insert(END, "Guess a letter!")
+        click1="guessing" #starting game
+    elif click1=="guessing":
+        if strikes == 0: #if the user is out of strikes
+            output.insert(END, "You are at zero strikes, so you lose. The word"+
+            " was "+output_words(hangman_letters)+"! Better luck next time.")
+            click1="normal"
+        x=0
+        if entered_text in hangman_letters: #if they got a letter correct
+            for num_of_letters in hangman_letters:
+                if num_of_letters == entered_text:
+                    words_found[x]=num_of_letters #adding correct letter
+                x+=1                          #to the letters found list
+            if words_found==hangman_letters:
+                output.insert(END, "You got it! Good job!")
+                click1="normal" #if the user won
+                return
+            output.insert(END, "You got one of the letters! The word so far i"+
+            "s " + output_words(words_found)) 
+        else: #if they didn't guess the letter correct
+            output.insert(END, "That is not in the word! Try again. You have "+
+            str(strikes)+' strikes left! The word so far is ' +
+            output_words(words_found))
+            strikes -= 1 #lowering strikes by one
 #features button
 def features():
     output.delete(0.0, END)

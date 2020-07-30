@@ -1,20 +1,37 @@
 #Kiran's Command Center.py
-#This is a programming language similar to python
+#This is a command center/window. What it does is it creates a window,
+#and the user can enter commands through that window. These commands
+#include, but are not limited to, the print, animation, calculator, and
+#a few game commands. Again: that is not all of the commands, there are
+#still many more after those. The window also has an exit button, a
+#'features' button for the user to learn how to use it, and a 'customize'
+#button so the user can customize the window.
 #Kiran Sinha 07202020
+
+#=====IMPORTS=====#
 from tkinter import *
 import tkinter, time
 import random
-exponent_in_first_num = False #setting variables
+
+
+#=====VARIABLES=====#
+exponent_in_first_num = False 
 answer=0
+
 choice1=False
 choice2=False
 choice3=False
+
 words_found = []
+
 story_location="starting"
+
 animation_inside_color="white"
+
 hangman_words= ['galaxy','potato','lucky','random','mystify','wizard','rhythm',
 'stretch','swivel','wavy','blitz','jackpot','fishhook','fission','blizzard','crypt',
 'ghost']
+
 animation_outline_color="white"
 animation_window_background_color = "black"
 animation_ww=800
@@ -22,17 +39,23 @@ animation_wh=600
 animation_xpos_start=400
 animation_ypos_start=300
 animation_min_movement=5
+
 hangman_word = "none"
 random1 = "none"
+
 current_game=False
+
 click1="startup"
+
 calculate_ = False
+
 exponents =[]
 nums=[]
 operators=[]
 num_of_exponents=0
 incalcloop = False
 order_of_operations=0
+
 customize1="normal"
 name = "Kiran's Command Center"
 bg="orange"
@@ -40,6 +63,7 @@ bg2="sky blue"
 bg3="lime"
 bg4="red"
 bg5="purple"
+
 word_found=""
 strikes = 10
 
@@ -278,8 +302,9 @@ def animate_animation(window, canvas,xinc,yinc):
 
             
 #adventure game command. It is mostly repeats of just outputting text,
-#so there may not be many comments because it is just repeatedly ouputting text
-def adventure_game():
+#so there may not be many comments because it is just repeatedly
+#outputting text, which there is no need to comment on.             
+    def adventure_game():
     global story_location, game_output, choice1, choice2, choice3
     game_output.delete(0.0, END) #clearing output
     current_game=True
@@ -493,6 +518,7 @@ def adventure_game():
             story_location="started"
         else:
             game_output.insert(END, "Please chooose one of the options.")  
+
     choice1 = False
     choice2 = False #resetting variables
     choice3 = False
@@ -516,19 +542,23 @@ def choice3(): #choice buttons for the adventure game
     adventure_game()
 
     
-#when user clicks button
+#click command. This is where all of the magic happens; when the user
+#clicks the 'enter' button, this function responds depending on what
+#the user entered.
 def click():
     #globalizing variables
-    global click1, window_title, background_, num1, operator,num2,num1exponent
+    global click1, window_title, background_, num1, operator,num2,
     global answer,exponent_in_first_num, animation_shape,animation_size
-    global animation_speed, animation_inside_color, animation_outline_color
-    global animation_window_background_color, game_output, exponent_in_second_num
+    global animation_speed, animation_inside_color, 
+    global animation_window_background_color, game_output, 
     global num3, num4, num5,operator_2,operator_3,operator_4,num2exponent
     global num3exponent,num4exponent,num5exponent,exponent_in_third_num
-    global exponent_in_fourth_num,exponent_in_fifth_num,num_of_nums,calculate_
-    global nums, exponents, num_of_exponents,operators,num_of_operators,incalcloop
-    global order_of_operations, random1,hangman_word,hangman_letters,words_found
-    global strikes,x
+    global exponent_in_fourth_num,exponent_in_fifth_num,num_of_nums,
+    global nums, exponents, num_of_exponents,operators,num_of_operators,
+    global order_of_operations, random1,hangman_word,hangman_letters,
+    global strikes,x,num1exponent,animation_outline_color,
+    global exponent_in_second_num, words_found, incalcloop
+    global calculate_
     #getting what the user entered
     entered_text=textentry.get()
     #clearing the output box so later we can put our ouput in it
@@ -537,7 +567,7 @@ def click():
 
 
     
-    #adventure game command, upgrade later
+    #adventure game command
     if entered_text.lower()=="game 1"or click1=="game 1":
         window = Tk() #creating game window
         window.title("Adventure Game")
@@ -561,6 +591,8 @@ def click():
             " for the clean way,' etc. (click NEXT)")
         else:
             game_output.insert(END, "Click 'next' to continue your story.")
+
+
     #Calculator command
     #asking first number
     elif entered_text.lower() == "calculator"or click1=="calculator":
@@ -748,7 +780,8 @@ def click():
             answer=0#setting answer back to zero so it can calculate again later
             click1="normal"
 
-    #NEW WINDOW command, upgrade later
+
+    #NEW WINDOW command
     #if color incorrect
     elif click1=="missed color":
         if entered_text.upper()=="STOP":
@@ -803,6 +836,7 @@ def click():
         "what title? Enter 'no name' if you would not like it to be named.")
         click1="new window"
 
+
     #More features
     elif entered_text.lower() == "more features":
         output.insert(END, "One cool feature is the 'animation' feature, wh"+
@@ -811,6 +845,8 @@ def click():
         " adventure game! If you don't know what to do, you can just enter"+
         " 'random command' and it will give use a random command! Another c"+
         "ool game is hangman!")
+
+        
     #Print command
     elif entered_text.lower() == "print" or click1=="print1":
         click1="print"
@@ -819,7 +855,8 @@ def click():
         output.insert(END, entered_text)
         click1="normal"
 
-    #Animation command, upgrade later
+
+    #Animation command
     elif entered_text.lower()=="animation"or click1=="animation":
         click1 = "animation"
         output.insert(END, "What would you like to animate? The options are:"+
@@ -870,8 +907,8 @@ def click():
             window.configure(bg=entered_text)
             window.destroy()
             animation_inside_color=entered_text
-            output.insert(END,"What should the outline color be?") #asking outline color
-            click1 = "outline color"
+            output.insert(END,"What should the outline color be?") 
+            click1 = "outline color"#asking outline color
         except:
             output.insert(END,"Sorry, that's not a color. Try again or enter"+
             " 'NO' to exit.")
@@ -904,6 +941,8 @@ def click():
         animation_window = create_animation_window()
         animation_canvas = create_animation_canvas(animation_window)
         animate_animation(animation_window,animation_canvas, animation_min_movement, animation_min_movement) 
+
+
     #random command command
     elif entered_text.lower()=="random command":
         randomc() #using the random command command

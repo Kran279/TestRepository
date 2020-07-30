@@ -3,6 +3,7 @@
 #Kiran Sinha 07202020
 from tkinter import *
 import tkinter, time
+import random
 exponent_in_first_num = False #setting variables
 answer=0
 choice1=False
@@ -17,6 +18,7 @@ animation_wh=600
 animation_xpos_start=400
 animation_ypos_start=300
 animation_min_movement=5
+random1 = "none"
 current_game=False
 click1="startup"
 calculate_ = False
@@ -33,6 +35,21 @@ bg2="sky blue"
 bg3="lime"
 bg4="red"
 bg5="purple"
+#function for the random command command
+def randomc():
+    global random1, click1
+    random1 = random.randint(1,5)
+    if random1==1:
+        click1="calculator"
+    elif random1==2:
+        click1="print1"
+    elif random1==3:
+        click1="animation"
+    elif random1==4:
+        click1="create window"
+    elif random1==5:
+        click1="game 1"
+    output.insert(END, "You got "+click1+"! Click 'next' to start it.")
 #function for creating window
 def create_window(bg,name,bg2,bg3,bg4,bg5):
     global window, textentry, output
@@ -41,20 +58,20 @@ def create_window(bg,name,bg2,bg3,bg4,bg5):
     window.title(name)
     window.configure(background=bg)
     #features button
-    Button(window, text="Features",bg=bg2,fg="black", width=6, command=features) .grid(row=8, column=0, sticky=W)
+    Button(window, text="Features",bg=bg2,fg="black", width=8, command=features) .grid(row=8, column=0, sticky=W)
     #input
     Label (window, text="Input:", bg=bg, fg="black", font="none 12 bold") .grid(row=1, column=0, sticky=W)
     textentry = Entry(window, width=30, bg="white")
     textentry.grid(row=2, column=0, sticky=W)
-    Button(window, text="Enter",bg=bg3,fg="black", width=6, command=click) .grid(row=3, column=0, sticky=W)
+    Button(window, text="Enter",bg=bg3,fg="black", width=8, command=click) .grid(row=3, column=0, sticky=W)
     #output
     Label (window, text="Output:", bg="orange", fg="black", font="none 12 bold") .grid(row=4, column=0, sticky=W)
     output = Text(window, width=75, height=6, wrap=WORD, background="white")
     output.grid(row=5, column=0, columnspan=2, sticky=W)
     #exit button
-    Button(window, bg=bg4, text="Exit",width=6, command=_exit) .grid(row=12, column = 0, sticky=W)
-    Button(window, bg=bg5, text="Customize",width=8, command=customize) .grid(row=13, column = 0, sticky=W)
-
+    Button(window, bg=bg4, text="Exit",width=8, command=_exit) .grid(row=13, column = 0, sticky=W)
+    Button(window, bg=bg5, text="Customize",width=8, command=customize) .grid(row=12, column = 0, sticky=W)
+    
 #function for the customize button
 def customize():
     global customize1, button, name, bg,bg1,bg2,bg3,bg4,bg5
@@ -464,7 +481,7 @@ def click():
     global num3exponent,num4exponent,num5exponent,exponent_in_third_num
     global exponent_in_fourth_num,exponent_in_fifth_num,num_of_nums,calculate_
     global nums, exponents, num_of_exponents,operators,num_of_operators,incalcloop
-    global order_of_operations
+    global order_of_operations, random
     #getting what the user entered
     entered_text=textentry.get()
     #clearing the output box so later we can put our ouput in it
@@ -474,7 +491,7 @@ def click():
 
     
     #adventure game command, upgrade later
-    if entered_text.lower()=="game 1":
+    if entered_text.lower()=="game 1"or click1=="game 1":
         window = Tk() #creating game window
         window.title("Adventure Game")
         window.configure(background="light blue") #creating buttons and output
@@ -486,6 +503,7 @@ def click():
         Button(window, text="Choice 3",bg="blue",fg="black", width=6, command=choice3) .grid(row=8, column=2, sticky=W)
         Label (window, text="Adventure Game 1", bg="light blue", fg="black", font="none 12 bold") .grid(row=0, column=1, sticky=W)
         Button(window, text="Map",bg="yellow",fg="black", width=6, command=map_) .grid(row=0, column=0, sticky=W)
+        click1="normal"
         if current_game==False:
             game_output.insert(END, "Welcome to: Adventure Game 1! In this game,"+
             " the 'narration' box of which you are reading this from tells the s"+
@@ -496,10 +514,9 @@ def click():
             " for the clean way,' etc. (click NEXT)")
         else:
             game_output.insert(END, "Click 'next' to continue your story.")
-
-    #Calculator command, upgrade later
+    #Calculator command
     #asking first number
-    elif entered_text.lower() == "calculator":
+    elif entered_text.lower() == "calculator"or click1=="calculator":
         click1 = "num1"
         output.insert(END, "What do you want the first number in your equation to "+
         "be?")
@@ -734,7 +751,7 @@ def click():
         output.insert(END, "Would you like to further customize your window?"+
         " Enter 'yes' if so, and anything else if not.")
     #if the user wants to create a new window
-    elif entered_text.lower()=="new window":
+    elif entered_text.lower()=="new window"or click1=="create window":
         output.insert(END, "Would you like your window to be named? If so,"+
         "what title? Enter 'no name' if you would not like it to be named.")
         click1="new window"
@@ -744,9 +761,10 @@ def click():
         output.insert(END, "One cool feature is the 'animation' feature, wh"+
         "ere you can create basic animations! Another nice feature is the 'p"+
         "rint' feature. One cool game you can play is 'game 1'. It is an"+
-        " adventure game!")
+        " adventure game! If you don't know what to do, you can just enter"+
+        " 'random command' and it will give use a random command!")
     #Print command
-    elif entered_text.lower() == "print":
+    elif entered_text.lower() == "print" or click1=="print1":
         click1="print"
         output.insert(END, "Type what you want to print.")
     elif click1=="print":
@@ -754,7 +772,7 @@ def click():
         click1="normal"
 
     #Animation command, upgrade later
-    elif entered_text.lower()=="animation":
+    elif entered_text.lower()=="animation"or click1=="animation":
         click1 = "animation"
         output.insert(END, "What would you like to animate? The options are:"+
         " circle and square.")
@@ -838,7 +856,9 @@ def click():
         animation_window = create_animation_window()
         animation_canvas = create_animation_canvas(animation_window)
         animate_animation(animation_window,animation_canvas, animation_min_movement, animation_min_movement) 
- 
+    #random command command
+    elif entered_text.lower()=="random command":
+        randomc()
 
             
 #features button

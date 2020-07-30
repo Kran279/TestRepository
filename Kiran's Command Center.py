@@ -42,9 +42,14 @@ bg4="red"
 bg5="purple"
 word_found=""
 strikes = 10
+
+#====FUNCTIONS====#
+
 #function that splits a word into letters
 def split(word):
     return list(word) #returning the split word
+
+
 #function that runs through the hangman list and outputs the word
 def output_words(words_found):
     global word_found
@@ -52,6 +57,8 @@ def output_words(words_found):
     word_found=word_found.join(words_found) #joining the letters
     word_found=word_found.lstrip(" ") #stripping of spaces
     return word_found #returning variable
+
+
 #function for the random command command
 def randomc():
     global random1, click1
@@ -69,6 +76,8 @@ def randomc():
     elif random1==6:
         click1="hangman"
     output.insert(END, "You got "+click1+"! Click 'next' to start it.")
+
+    
 #function for creating window
 def create_window(bg,name,bg2,bg3,bg4,bg5):
     global window, textentry, output
@@ -90,6 +99,7 @@ def create_window(bg,name,bg2,bg3,bg4,bg5):
     #exit button
     Button(window, bg=bg4, text="Exit",width=8, command=_exit) .grid(row=13, column = 0, sticky=W)
     Button(window, bg=bg5, text="Customize",width=8, command=customize) .grid(row=12, column = 0, sticky=W)
+
     
 #function for the customize button
 def customize():
@@ -164,6 +174,7 @@ def customize():
             output.insert(END, "Sorry, that's not an option. You can retry or"+
             " enter 'exit' to exit.")
 
+
 #function for the calculator, does the math
 def calculation(numb1,numb2,operator_): #importing variables
     if operator_ == "multiplication_": #checking the operator, then doing the
@@ -175,6 +186,8 @@ def calculation(numb1,numb2,operator_): #importing variables
     elif operator_ == "subtraction":
         answer = int(numb1)-int(numb2)
     return answer
+
+
 def map_(): #map function in game
     game1_map=Tk()#creating map window
     #finding where in the story the player is
@@ -211,6 +224,8 @@ def map_(): #map function in game
         game1_map.mainloop()
     else: #if the user just started
         Label (game1_map, text="Nothing to see here (yet)", bg="white", fg="black", font="none 12 bold") .grid(row=1, column=0, sticky=W)
+
+
 #the main window of the animation for the animation command
 def create_animation_window():
   window = tkinter.Tk()
@@ -220,12 +235,14 @@ def create_animation_window():
   window.geometry(f'{animation_ww}x{animation_wh}')
   return window
 
+
 #creates a canvas for animation and adds it to main window
 def create_animation_canvas(window):
   canvas = tkinter.Canvas(window)
   canvas.configure(bg=animation_window_background_color) #change color into changeable variable later
   canvas.pack(fill="both", expand=True)
   return canvas
+
 
 #creates and animates the animation in an infinite loop
 def animate_animation(window, canvas,xinc,yinc):
@@ -258,6 +275,8 @@ def animate_animation(window, canvas,xinc,yinc):
         entered_text=textentry.get()
         if entered_text.lower() == "close animation":
             window.destroy()
+
+            
 #adventure game command. It is mostly repeats of just outputting text,
 #so there may not be many comments because it is just repeatedly ouputting text
 def adventure_game():
@@ -477,18 +496,26 @@ def adventure_game():
     choice1 = False
     choice2 = False #resetting variables
     choice3 = False
+
+    
 def choice1(): #choice buttons for the adventure game
     global choice1 #globalizing variable
     choice1 = True #telling the adventure game the choice
     adventure_game()
+
+    
 def choice2(): #choice buttons for the adventure game
     global choice2 #globalizing variable
     choice2 = True #telling the adventure game the choice
     adventure_game()
+
+    
 def choice3(): #choice buttons for the adventure game
     global choice3 #globalizing variable
     choice3 = True #telling the adventure game the choice
     adventure_game()
+
+    
 #when user clicks button
 def click():
     #globalizing variables
@@ -915,6 +942,8 @@ def click():
             str(strikes)+' strikes left! The word so far is ' +
             output_words(words_found))
             strikes -= 1 #lowering strikes by one
+
+            
 #features button
 def features():
     output.delete(0.0, END)
@@ -923,6 +952,8 @@ def features():
     "d for more specifics like background and text, but those are optional."+
     " Another good command is the calculator command, which can do basic math."+
     " Type in 'More Features' and hit enter to hear some more features.")
+
+
 #exit button
 def _exit():
     window.destroy()

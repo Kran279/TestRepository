@@ -26,7 +26,107 @@ operators=[]
 num_of_exponents=0
 incalcloop = False
 order_of_operations=0
+customize1="normal"
+name = "Kiran's Command Center"
+bg="orange"
+bg2="sky blue"
+bg3="lime"
+bg4="red"
+bg5="purple"
+#function for creating window
+def create_window(bg,name,bg2,bg3,bg4,bg5):
+    global window, textentry, output
+    #creating window
+    window = Tk()
+    window.title(name)
+    window.configure(background=bg)
+    #features button
+    Button(window, text="Features",bg=bg2,fg="black", width=6, command=features) .grid(row=8, column=0, sticky=W)
+    #input
+    Label (window, text="Input:", bg=bg, fg="black", font="none 12 bold") .grid(row=1, column=0, sticky=W)
+    textentry = Entry(window, width=30, bg="white")
+    textentry.grid(row=2, column=0, sticky=W)
+    Button(window, text="Enter",bg=bg3,fg="black", width=6, command=click) .grid(row=3, column=0, sticky=W)
+    #output
+    Label (window, text="Output:", bg="orange", fg="black", font="none 12 bold") .grid(row=4, column=0, sticky=W)
+    output = Text(window, width=75, height=6, wrap=WORD, background="white")
+    output.grid(row=5, column=0, columnspan=2, sticky=W)
+    #exit button
+    Button(window, bg=bg4, text="Exit",width=6, command=_exit) .grid(row=12, column = 0, sticky=W)
+    Button(window, bg=bg5, text="Customize",width=8, command=customize) .grid(row=13, column = 0, sticky=W)
 
+#function for the customize button
+def customize():
+    global customize1, button, name, bg,bg1,bg2,bg3,bg4,bg5
+    #getting what the user entered
+    entered_text=textentry.get()
+    #clearing the output box so later we can put our ouput in it
+    output.delete(0.0, END)
+    if customize1 =="normal":
+        output.insert(END, "What color would you like the background to be?"+
+        " Type your answer and then click 'customize' again.")
+        customize1="bg" #asking user background color
+    elif customize1=="bg":
+        try: #checking if they entered an actual color
+            window.configure(background=entered_text)
+            window.configure(background=bg)
+            bg=entered_text
+            customize1="title" #asking window title
+            output.insert(END, "Enter the title you would like for the window"+
+            " or enter 'exit' to exit.")
+        except: #if they didn't enter a legitimate color
+            output.insert(END, "Sorry, thats not a valid color. Try again or "+
+            "enter 'exit' to exit.")
+    elif entered_text.lower()=="exit": #if they want to exit
+        customize1="normal"
+    elif entered_text.lower()=="apply": #if they want to apply changes
+        window.destroy() #destroying current window
+        create_window(bg, name, bg2,bg3,bg4,bg5)#recreating window with new
+        customize1 = "normal"                  #settings
+    elif customize1 == "title": #If they want to change the title
+        name = entered_text
+        customize1 = "buttons"
+        output.insert(END, "Would you like to customize any of the buttons? En"+
+        "ter the button name if so or enter 'apply' to apply the changes.")
+    elif customize1 == "buttons": #if they want the change the color of some
+        if entered_text.lower()=="enter": #of the buttons
+            customize1="button color"  #enter button
+            button="enter"
+            output.insert(END, "What color would you like it to be?")
+        elif entered_text.lower()=="exit": #exit button
+            customize1="button color"
+            button="exit"
+            output.insert(END, "What color would you like it to be?")
+        elif entered_text.lower()=="features": #features button
+            customize1="button color"
+            button = "features"
+            output.insert(END, "What color would you like it to be?")
+        elif entered_text.lower()=="customize": #customize button
+            customize1="button color"
+            button = "customize"
+            output.insert(END, "What color would you like it to be?")
+        else: #if they didn't enter anything valid
+            output.insert(END, "Sorry, that's not one of the options. You c"+
+            "an try again or enter 'exit' to exit.")
+    elif customize1 == "button color":
+        try: #testing if they entered a legitimate color
+            new_window = Tk()
+            new_window.configure(background = entered_text)
+            new_window.destroy()
+            if button=="enter": #setting colors
+                bg3=entered_text
+            elif button == "features":
+                bg2=entered_text
+            elif button == "exit":
+                bg4=entered_text
+            elif button == "customize":
+                bg5=entered_text
+            output.insert(END, "Would you like to change another button's co"+
+            "lor? If so, enter the button, and if not, enter 'apply'.")
+        except: #if they didn't 
+            new_window.destroy()
+            output.insert(END, "Sorry, that's not an option. You can retry or"+
+            " enter 'exit' to exit.")
 
 #function for the calculator, does the math
 def calculation(numb1,numb2,operator_): #importing variables
@@ -551,25 +651,35 @@ def click():
             while 'multiplication' in operators:
                 for z in range(0,num_of_operators):
                     if operators[z]=="multiplication": #checking for multiplication
-                        operators[z]="multiplication_"
+                        operators.remove("multiplication")
                         order_of_operations = z
-                        nums[z]=nums[z]*nums[z+1] #applying PEMDAS
+                        try:
+                            nums[z]=nums[z]*nums[z+1] #applying PEMDAS
+                        except:
+                            pass
                         nums.remove(nums[z+1])
             while 'division' in operators:
                 for q in range(0,num_of_operators):
                     if operators[q]=="division": #checking for division
-                        operators[q]="division_"
+                        operators.remove("division")
                         order_of_operations = q
-                        nums[q]=nums[q]/nums[q+1] #applying PEMDAS
+                        try:
+                            nums[q]=nums[q]/nums[q+1] #applying PEMDAS
+                        except:
+                            pass
                         nums.remove(nums[q+1])
                 
             #calculating
             answer = 0
-            for y in range(0,num_of_operators):
-                try: #using the calculation function
-                    answer += calculation(nums[y],nums[y+1],operators[y])
-                except: #if there is nothing left to calculate, then it does nothing
-                    pass
+            try:
+                test=nums[1]
+                for y in range(0,num_of_operators):
+                    try: #using the calculation function
+                        answer += calculation(nums[y],nums[y+1],operators[y])
+                    except: #if there is nothing left to calculate, then it does nothing
+                        pass
+            except:
+                answer=nums[0]
             output.insert(END, "The answer is "+str(answer)+"!")#telling user answer
             answer=0#setting answer back to zero so it can calculate again later
             click1="normal"
@@ -612,14 +722,14 @@ def click():
         else:
             click1="normal"
             window = Tk()
-            window.title(window_title)a
+            window.title(window_title)
             output.insert(END, "Okay")
     #asking name of window
     elif click1=="new window":
         if entered_text.upper() == "NO NAME":
             window_title="unnamed window"
         else:
-            window_title="entered text"
+            window_title=entered_text
         click1 = "further customization"
         output.insert(END, "Would you like to further customize your window?"+
         " Enter 'yes' if so, and anything else if not.")
@@ -743,20 +853,8 @@ def features():
 def _exit():
     window.destroy()
     exit()
+
+#=====MAIN CODE=====#
+    
 #creating window
-window = Tk()
-window.title("Kiran's Programming Language")
-window.configure(background="orange")
-#features button
-Button(window, text="Features",bg="sky blue",fg="black", width=6, command=features) .grid(row=8, column=0, sticky=W)
-#input
-Label (window, text="Input:", bg="orange", fg="black", font="none 12 bold") .grid(row=1, column=0, sticky=W)
-textentry = Entry(window, width=30, bg="white")
-textentry.grid(row=2, column=0, sticky=W)
-Button(window, text="Enter",bg="lime",fg="black", width=6, command=click) .grid(row=3, column=0, sticky=W)
-#output
-Label (window, text="Output:", bg="orange", fg="black", font="none 12 bold") .grid(row=4, column=0, sticky=W)
-output = Text(window, width=75, height=6, wrap=WORD, background="white")
-output.grid(row=5, column=0, columnspan=2, sticky=W)
-#exit button
-Button(window, bg="red", text="Exit",width=6, command=_exit) .grid(row=12, column = 0, sticky=W)
+create_window(bg,name,bg2,bg3,bg4,bg5)

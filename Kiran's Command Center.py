@@ -117,7 +117,7 @@ def create_window(bg,name,bg2,bg3,bg4,bg5):
     textentry.grid(row=2, column=0, sticky=W)
     Button(window, text="Enter",bg=bg3,fg="black", width=8, command=click) .grid(row=3, column=0, sticky=W)
     #output
-    Label (window, text="Output:", bg="orange", fg="black", font="none 12 bold") .grid(row=4, column=0, sticky=W)
+    Label (window, text="Output:", bg=bg, fg="black", font="none 12 bold") .grid(row=4, column=0, sticky=W)
     output = Text(window, width=75, height=6, wrap=WORD, background="white")
     output.grid(row=5, column=0, columnspan=2, sticky=W)
     #exit button
@@ -858,11 +858,11 @@ def click():
 
     #Animation command
     elif entered_text.lower()=="animation"or click1=="animation":
-        click1 = "animation"
+        click1 = "animation2"
         output.insert(END, "What would you like to animate? The options are:"+
         " circle and square.")
     #choosing what the user wants to animate
-    elif click1=="animation":
+    elif click1=="animation2":
         #checking if the user chose one of the options
         if entered_text.lower() == "circle":
             animation_shape = "circle"

@@ -283,7 +283,7 @@ def animate_animation(window, canvas,xinc,yinc):
                 animation_ypos_start-animation_size,
                 animation_xpos_start+animation_size,
                 animation_ypos_start+animation_size,
-                fill="blue", outline="white", width=4)
+                fill=animation_inside_color, outline=animation_outline_color, width=4)
     #actual animation
     while True:
         canvas.move(animation,xinc,yinc)
@@ -977,10 +977,11 @@ def click():
             output.insert(END, "You got one of the letters! The word so far i"+
             "s " + output_words(words_found)) 
         else: #if they didn't guess the letter correct
-            output.insert(END, "That is not in the word! Try again. You have "+
-            str(strikes)+' strikes left! The word so far is ' +
-            output_words(words_found))
-            strikes -= 1 #lowering strikes by one
+            if click1 != 'normal':
+                output.insert(END, "That is not in the word! Try again. You have "+
+                str(strikes)+' strikes left! The word so far is ' +
+                output_words(words_found))
+                strikes -= 1 #lowering strikes by one
 
             
 #features button

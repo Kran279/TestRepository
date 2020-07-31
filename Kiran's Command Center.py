@@ -304,7 +304,7 @@ def animate_animation(window, canvas,xinc,yinc):
 #adventure game command. It is mostly repeats of just outputting text,
 #so there may not be many comments because it is just repeatedly
 #outputting text, which there is no need to comment on.             
-    def adventure_game():
+def adventure_game():
     global story_location, game_output, choice1, choice2, choice3
     game_output.delete(0.0, END) #clearing output
     current_game=True
@@ -547,16 +547,16 @@ def choice3(): #choice buttons for the adventure game
 #the user entered.
 def click():
     #globalizing variables
-    global click1, window_title, background_, num1, operator,num2,
+    global click1, window_title, background_, num1, operator,num2
     global answer,exponent_in_first_num, animation_shape,animation_size
-    global animation_speed, animation_inside_color, 
-    global animation_window_background_color, game_output, 
+    global animation_speed, animation_inside_color
+    global animation_window_background_color, game_output 
     global num3, num4, num5,operator_2,operator_3,operator_4,num2exponent
     global num3exponent,num4exponent,num5exponent,exponent_in_third_num
-    global exponent_in_fourth_num,exponent_in_fifth_num,num_of_nums,
-    global nums, exponents, num_of_exponents,operators,num_of_operators,
-    global order_of_operations, random1,hangman_word,hangman_letters,
-    global strikes,x,num1exponent,animation_outline_color,
+    global exponent_in_fourth_num,exponent_in_fifth_num,num_of_nums
+    global nums, exponents, num_of_exponents,operators,num_of_operators
+    global order_of_operations, random1,hangman_word,hangman_letters
+    global strikes,x,num1exponent,animation_outline_color
     global exponent_in_second_num, words_found, incalcloop
     global calculate_
     #getting what the user entered
